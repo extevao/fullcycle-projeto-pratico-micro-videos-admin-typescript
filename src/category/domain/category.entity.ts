@@ -59,3 +59,7 @@ export class Category {
     };
   }
 }
+
+
+// objetos de valores sao livres de efeitos colaterais
+// tambem sao imutavies
