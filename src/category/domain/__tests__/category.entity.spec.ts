@@ -1,7 +1,14 @@
+import { EntityValidationError } from '../../../shared/domain/validators/validation.error';
 import { Uuid } from '../../../shared/domain/values-objects/uuid.vo';
 import { Category } from '../category.entity';
 
 describe('Category Unit Tests', () => {
+  let validateSpy: any;
+
+  beforeEach(() => {
+    validateSpy = jest.spyOn(Category, 'validate')
+  })
+
   describe('constructor', () => {
     test('should create a category with default values', () => {
       const category = new Category({
@@ -57,6 +64,7 @@ describe('Category Unit Tests', () => {
       expect(category.description).toBeNull();
       expect(category.is_active).toBe(true);
       expect(category.created_at).toBeInstanceOf(Date);
+      // expect(validateSpy).toHaveBeenCalledTimes(1)
     });
 
     test('should create a category with name and description', () => {
@@ -65,29 +73,33 @@ describe('Category Unit Tests', () => {
         description: 'Movie description',
       });
 
-      expect(category.category_id).toBeInstanceOf(Uuid);
-      expect(category.name).toBe('Movie');
-      expect(category.description).toBe('Movie description');
-      expect(category.is_active).toBe(true);
-      expect(category.created_at).toBeInstanceOf(Date);
+      expect(category.category_id).toBeInstanceOf(Uuid)
+      expect(category.name).toBe('Movie')
+      expect(category.description).toBe('Movie description')
+      expect(category.is_active).toBe(true)
+      expect(category.created_at).toBeInstanceOf(Date)
+
+      // expect(validateSpy).toHaveBeenCalledTimes(1)
     });
 
     test('should create a category with name and is_active', () => {
       const category = Category.create({
         name: 'Movie',
         is_active: false,
-      });
+      })
 
-      expect(category.category_id).toBeInstanceOf(Uuid);
-      expect(category.name).toBe('Movie');
-      expect(category.description).toBeNull();
-      expect(category.is_active).toBe(false);
-      expect(category.created_at).toBeInstanceOf(Date);
-    });
-  });
+      expect(category.category_id).toBeInstanceOf(Uuid)
+      expect(category.name).toBe('Movie')
+      expect(category.description).toBeNull()
+      expect(category.is_active).toBe(false)
+      expect(category.created_at).toBeInstanceOf(Date)
+      // expect(validateSpy).toHaveBeenCalledTimes(1)
+
+    })
+  })
 
   test('should change name', () => {
-    const category = new Category({
+    const category = Category.create({
       name: 'Movie',
     });
 
@@ -96,6 +108,7 @@ describe('Category Unit Tests', () => {
     category.changeName('Name changed');
 
     expect(category.name).toBe('Name changed');
+
   });
 
   test('should change description', () => {
@@ -108,6 +121,7 @@ describe('Category Unit Tests', () => {
     category.changeDescription('Description');
 
     expect(category.description).toBe('Description');
+
   });
 
   test('should active a category', () => {
@@ -157,3 +171,22 @@ describe('Category Unit Tests', () => {
     })
   });
 });
+
+
+describe('Category Validator', () => {
+  describe('create command', () => {
+
+    test('xpto', () => {
+      expect(() => {
+        Category.create({
+          name: ''
+        })
+      }).toThrow(
+        new EntityValidationError({
+          name: ['name is required']
+        })
+      )
+    })
+
+  })
+})
