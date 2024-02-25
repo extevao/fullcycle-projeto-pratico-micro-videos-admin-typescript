@@ -19,7 +19,6 @@ export type CategoryCreateCommand = {
 };
 
 export class Category extends Entity {
-
   category_id: Uuid;
   name: string;
   description: string | null;
