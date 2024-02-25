@@ -5,7 +5,10 @@ import { SearchParams, SortDirection } from "../../../domain/repository/search-p
 import { SearchResult } from "../../../domain/repository/search-result";
 import { ValueObject } from "../../../domain/value-object";
 
-export abstract class InMemoryRepository<E extends Entity, EntityId extends ValueObject> implements IRepository<E, EntityId> {
+export abstract class InMemoryRepository<
+  E extends Entity,
+  EntityId extends ValueObject
+> implements IRepository<E, EntityId> {
   items: E[] = []
 
   async insert(entity: E): Promise<void> {
@@ -77,12 +80,11 @@ export abstract class InMemorySearchableRepository<
     })
   }
 
-
   protected abstract applyFilter(items: E[], filter: Filter | null): Promise<E[]>;
 
   protected applyPaginate(items: E[], page: SearchParams['page'], per_page: SearchParams['per_page']) {
     const start = (page - 1) * per_page; // 1 * 15 = 15
-    const limit = start * per_page; // 15 + 15 = 30
+    const limit = start + per_page; // 15 + 15 = 30
 
     return items.slice(start, limit)
   }
