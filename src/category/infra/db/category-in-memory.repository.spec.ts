@@ -10,7 +10,7 @@ describe('CategoryInMemoryRepository', () => {
 
   it('should no filter items when filter object is null', async () => {
     const items = [
-      Category.create({ name: 'test' })
+      Category.fake().aCategory().build()
     ]
     const filterSpy = jest.spyOn(items, 'filter' as any)
 
@@ -22,9 +22,9 @@ describe('CategoryInMemoryRepository', () => {
 
   it('should filter items using filter parameter', async () => {
     const items = [
-      Category.create({ name: 'test' }),
-      Category.create({ name: 'TEST' }),
-      Category.create({ name: 'fake' })
+      Category.fake().aCategory().withName('test').build(),
+      Category.fake().aCategory().withName('TEST').build(),
+      Category.fake().aCategory().withName('fake').build(),
     ]
     const filterSpy = jest.spyOn(items, 'filter' as any)
 
@@ -36,9 +36,23 @@ describe('CategoryInMemoryRepository', () => {
   it('should sort by created_at when sort param is null', async () => {
     const createdAt = new Date()
     const items = [
-      new Category({ name: 'test', created_at: createdAt }),
-      new Category({ name: 'TEST', created_at: new Date(createdAt.getTime() + 200) }),
-      new Category({ name: 'fake', created_at: new Date(createdAt.getTime() + 300) })
+      Category
+        .fake()
+        .aCategory()
+        .withName('fake')
+        .withCreatedAt(createdAt)
+        .build(),
+      Category.fake()
+        .aCategory()
+        .withName('TEST')
+        .withCreatedAt(new Date(createdAt.getTime() + 200))
+        .build(),
+      Category
+        .fake()
+        .aCategory()
+        .withName('fake')
+        .withCreatedAt(new Date(createdAt.getTime() + 300))
+        .build(),
     ]
 
 
@@ -48,9 +62,21 @@ describe('CategoryInMemoryRepository', () => {
 
   it('should sort by name', async () => {
     const items = [
-      Category.create({ name: 'c' }),
-      Category.create({ name: 'b' }),
-      Category.create({ name: 'a' }),
+      Category
+        .fake()
+        .aCategory()
+        .withName('c')
+        .build(),
+      Category
+        .fake()
+        .aCategory()
+        .withName('b')
+        .build(),
+      Category
+        .fake()
+        .aCategory()
+        .withName('a')
+        .build(),
     ]
 
     let itemsSorted = await respository['applySort'](items, 'name', 'asc')
@@ -58,8 +84,6 @@ describe('CategoryInMemoryRepository', () => {
 
     itemsSorted = await respository['applySort'](items, 'name', 'desc')
     expect(itemsSorted).toStrictEqual([items[0], items[1], items[2]])
-
   })
-
 
 })
