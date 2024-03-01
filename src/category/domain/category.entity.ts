@@ -73,7 +73,6 @@ export class Category extends Entity {
     if (!isValid) {
       throw new EntityValidationError(validator.errors)
     }
-
   }
 
   get entity_id(): ValueObject {
