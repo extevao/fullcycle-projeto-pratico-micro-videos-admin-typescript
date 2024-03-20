@@ -1,11 +1,11 @@
 import { Category } from "../../../domain/category.entity"
-import { CategoryInMemoryRespository } from "./category-in-memory.repository"
+import { CategoryInMemoryRepository } from "./category-in-memory.repository"
 
 
 describe('CategoryInMemoryRespository', () => {
-  let respository: CategoryInMemoryRespository
+  let respository: CategoryInMemoryRepository
 
-  beforeEach((() => respository = new CategoryInMemoryRespository()))
+  beforeEach((() => respository = new CategoryInMemoryRepository()))
 
 
   it('should no filter items when filter object is null', async () => {

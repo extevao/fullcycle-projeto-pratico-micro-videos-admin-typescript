@@ -1,12 +1,12 @@
-import { CategoryInMemoryRespository } from "../../../infra/db/in-memory/category-in-memory.repository";
+import { CategoryInMemoryRepository } from "../../../infra/db/in-memory/category-in-memory.repository";
 import { CreateCategoryUseCase } from "../../create-category.use-case";
 
 describe('CreateCategoryUseCase Unit Tests', () => {
   let useCase: CreateCategoryUseCase;
-  let repository: CategoryInMemoryRespository;
+  let repository: CategoryInMemoryRepository;
 
   beforeEach(() => {
-    repository = new CategoryInMemoryRespository()
+    repository = new CategoryInMemoryRepository()
     useCase = new CreateCategoryUseCase(repository)
   })
 
