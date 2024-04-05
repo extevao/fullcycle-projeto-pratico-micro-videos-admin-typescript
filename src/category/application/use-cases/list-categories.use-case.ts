@@ -1,7 +1,8 @@
-import { PaginationOutputMapper } from "../../../shared/application/pagination-output";
+import { PaginationOutput, PaginationOutputMapper } from "../../../shared/application/pagination-output";
 import { IUseCase } from "../../../shared/application/use-case.interface";
 import { SortDirection } from "../../../shared/domain/repository/search-params";
-import { CategoryFilter, CategorySearchParams, ICategoryRepository } from "../../domain/category.repository";
+import { CategoryFilter, CategorySearchParams, CategorySearchResult, ICategoryRepository } from "../../domain/category.repository";
+import { CategoryOutput, CategoryOutputMapper } from "./common/category-output";
 
 
 export class ListCategoriesUseCase
@@ -15,13 +16,18 @@ export class ListCategoriesUseCase
     const params = new CategorySearchParams(input)
     const searchResult = await this.categoryRepo.search(params)
 
-    const outputItems = searchResult.items.map(item => item)
+    return this.toOutuput(searchResult)
+  }
 
-    return PaginationOutputMapper.toOutput(searchResult.items, searchResult)
+  private toOutuput(searchResult: CategorySearchResult): ListCategoriesOutput {
+    const { items: _items } = searchResult
+
+    const items = _items.map(category => CategoryOutputMapper.toOutput(category))
+
+    return PaginationOutputMapper.toOutput(items, searchResult)
   }
 
 }
-
 
 
 type ListCategoriesInput = {
@@ -32,6 +38,4 @@ type ListCategoriesInput = {
   filter?: CategoryFilter | null;
 }
 
-type ListCategoriesOutput = {
-
-}
+type ListCategoriesOutput = PaginationOutput<CategoryOutput>

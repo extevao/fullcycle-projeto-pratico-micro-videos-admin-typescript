@@ -21,11 +21,10 @@ export class CategoryRules {
 
   constructor({ name, description, is_active }: Category) {
     Object.assign(this, { name, description, is_active })
-
   }
 }
 
-export class CategoryValidator extends ClassValidatorFields<CategoryRules>{
+export class CategoryValidator extends ClassValidatorFields<CategoryRules> {
   validate(entity: Category) {
     return super.validate(new CategoryRules(entity))
   }
